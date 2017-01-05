@@ -5,6 +5,9 @@ const controller = require(__dirname + '/controller');
 // 引入koa-bodyparser来解析原始request请求
 const bodyParser = require('koa-bodyparser');
 
+const jwt = require('koa-jwt');
+const jwtConfig = require("./config/jwt.js");
+
 const session = require('koa-session');
 const CSRF = require('koa-csrf').default;
 const convert = require('koa-convert');
@@ -12,6 +15,8 @@ const convert = require('koa-convert');
 const app = new Koa();
 // app配置信息
 const appConfig = require(__dirname + "/config/app");
+
+
 
 // 对于任何请求，app将调用该异步函数处理请求：
 // app.use(async (ctx, next) => {
@@ -28,14 +33,24 @@ app.use(bodyParser());
 // app.use(new csrf.default());
 // console.log(csrf);
 // 添加 CSRF 中间件
-app.use(new CSRF({
-    invalidSessionSecretMessage: 'Invalid session secret',
-    invalidSessionSecretStatusCode: 403,
-    invalidTokenMessage: 'Invalid CSRF token',
-    invalidTokenStatusCode: 403,
-    excludedMethods: ['GET', 'HEAD', 'OPTIONS'],
-    disableQuery: false
+// app.use(new CSRF({
+//     invalidSessionSecretMessage: 'Invalid session secret',
+//     invalidSessionSecretStatusCode: 403,
+//     invalidTokenMessage: 'Invalid CSRF token',
+//     invalidTokenStatusCode: 403,
+//     excludedMethods: ['GET', 'HEAD', 'OPTIONS'],
+//     disableQuery: false
+// }));
+
+// Middleware below this line is only reached if JWT token is valid
+app.use(jwt({
+    getToken: jwtConfig.getToken,
+    secret: 'shared-secret',
+    key: 'jwtdata'
 }));
+// console.log(jwt.sign({
+//     data: 0
+// }, "shared-secret"));
 
 // 添加路由中间件:
 app.use(controller());
