@@ -21,7 +21,7 @@ function addMapping (router, mapping) {
 // 遍历所有的controller
 function addControllers (router) {
 	// 获取所有的controllers
-	var files = fs.readdirSync('./controllers');
+	var files = fs.readdirSync(__dirname + '/../controllers');
 	// 筛选出js文件
 	var js_file = files.filter((f) => {
 		return f.endsWith('.js');
@@ -29,13 +29,13 @@ function addControllers (router) {
 	// 映射路由
 	for (var f of js_file) { // 遍历属性值
 		console.log(`process controller: ${f}...`);
-		let mapping = require(__dirname + '/controllers/' + f);
+		let mapping = require(__dirname + '/../controllers/' + f);
 		addMapping(router, mapping);
 	}
 }
 
 module.exports = function (dir) {
-	let 
+	let
 		controllers_dir = dir || 'controllers', // 如果不传参数，扫描目录默认为'controllers'
 		router = require('koa-router')();
 	addControllers(router);

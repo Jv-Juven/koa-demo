@@ -1,8 +1,11 @@
+/**
+ * 封装Sequelize
+ */
 const Sequelize = require('sequelize');
 
 const uuid = require('node-uuid');
 
-const config = require('./database/config');
+const config = require('../database/config');
 
 console.log('init sequelize...');
 
