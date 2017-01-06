@@ -14,7 +14,7 @@ const appConfig = require(__dirname + "/config/app");
 
 const session = require("./modules/session");
 const jwt = require("./modules/jwt");
-const csrf = require("./modules/csrf");
+// const csrf = require("./modules/csrf");
 
 // 对于任何请求，app将调用该异步函数处理请求：
 // app.use(async (ctx, next) => {
@@ -22,13 +22,17 @@ const csrf = require("./modules/csrf");
 // 	await next();
 // });
 app.keys = ['session key', 'csrf example'];
-app.use(convert(session(app)));
+// app.use(convert(session(app)));
+app.use(session())
 // 注册koa-bodyparser到app对象上
 app.use(bodyParser());
+
 /**
- * csrf middleware
+ * csrf 中间件
+ * 对于表单可以防止csrf 攻击，但对于单页应用，存在局限性
+ * 相关的了解可以参阅： https://segmentfault.com/a/1190000003716037
  */
-app.use(csrf);
+// app.use(csrf);
 
 // Middleware below this line is only reached if JWT token is valid
 app.use(jwt);
